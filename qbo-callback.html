@@ -16,17 +16,19 @@ button { font-size: 1em; padding: 8px 16px; }
 <h1>QuickBooks connection</h1>
 <p id="msg">This page finishes a QuickBooks sign-in started from MF-CFO's own connector. Nothing on it is stored or sent anywhere.</p>
 <div id="box" hidden>
-<p><strong>Copy this address and paste it into the terminal that is waiting for it.</strong> It works once and expires in a few minutes.</p>
+<p><strong>Click Copy (or copy the address in the box) and paste it into the terminal that is waiting for it.</strong> It works once and expires in a few minutes.</p>
 <textarea id="addr" readonly></textarea>
 <p><button id="copy" type="button">Copy</button> <span id="done"></span></p>
 </div>
 <script>
 var q = new URLSearchParams(location.search);
 if (q.get("code") || q.get("error")) {
+  var landed = location.href;
+  history.replaceState(null, "", location.pathname);   // take the one-time code out of the address bar and history
   document.getElementById("box").hidden = false;
-  document.getElementById("addr").value = location.href;
+  document.getElementById("addr").value = landed;
   document.getElementById("copy").onclick = function () {
-    navigator.clipboard.writeText(location.href).then(function () {
+    navigator.clipboard.writeText(landed).then(function () {
       document.getElementById("done").textContent = "Copied.";
     });
   };
